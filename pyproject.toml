@@ -1,0 +1,13 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "agent-sdk-python"
+version = "0.13.0"
+description = "Typed Python client for the agent.v1 backend over easy-rpc"
+requires-python = ">=3.11"
+dependencies = ["protobuf>=6.0", "httpx>=0.27"]
+
+[tool.setuptools.packages.find]
+include = ["agentsdk*"]
