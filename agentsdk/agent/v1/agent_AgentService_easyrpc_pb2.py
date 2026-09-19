@@ -268,6 +268,11 @@ class AgentServiceClient:
         self.last_trailers = res.trailers
         return decode_msg(res.body, m.GetFileMetaResponse, kind)
 
+    async def getFileStream(self, req: m.GetFileRequest, kind: str = "proto"):
+        ct = content_type_for(True, kind)
+        st = await self._t.open_stream(Request(url="/agent.v1.AgentService/GetFileStream", headers={"content-type": [ct]}, body=frame(encode_msg(req, kind))))
+        return TypedStream(st, lambda b: decode_msg(b, m.FileChunk, kind))
+
     async def getAgentConfig(self, req: m.GetAgentConfigRequest, kind: str = "proto") -> m.GetAgentConfigResponse:
         ct = content_type_for(False, kind)
         res = await self._t.send(Request(url="/agent.v1.AgentService/GetAgentConfig", headers={"content-type": [ct]}, body=encode_msg(req, kind)))
