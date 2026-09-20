@@ -15,6 +15,13 @@ class AgentServiceClient:
         self.last_trailers = res.trailers
         return decode_msg(res.body, m.HealthResponse, kind)
 
+    async def getIdentity(self, req: m.GetIdentityRequest, kind: str = "proto") -> m.GetIdentityResponse:
+        ct = content_type_for(False, kind)
+        res = await self._t.send(Request(url="/agent.v1.AgentService/GetIdentity", headers={"content-type": [ct]}, body=encode_msg(req, kind)))
+        if res.error: raise res.error
+        self.last_trailers = res.trailers
+        return decode_msg(res.body, m.GetIdentityResponse, kind)
+
     async def listSessions(self, req: m.ListSessionsRequest, kind: str = "proto") -> m.ListSessionsResponse:
         ct = content_type_for(False, kind)
         res = await self._t.send(Request(url="/agent.v1.AgentService/ListSessions", headers={"content-type": [ct]}, body=encode_msg(req, kind)))
